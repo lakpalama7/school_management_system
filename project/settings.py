@@ -148,7 +148,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 <<<<<<< HEAD
 EMAIL_HOST_USER = 'svcet@gmail.com'
-EMAIL_HOST_PASSWORD = 'dfsdfdfzdfdfdf'  # Use app password for Gmail
+EMAIL_HOST_PASSWORD = ''  # Use app password for Gmail
 =======
 EMAIL_HOST_USER = 'svcet@gmail.com'
 EMAIL_HOST_PASSWORD = ''  # Use app password for Gmail
