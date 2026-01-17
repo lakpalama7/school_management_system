@@ -1,0 +1,8 @@
+{% for field in form %}
+
+        <fieldset class="fieldset">
+        <legend class="fieldset-legend">{{ field.label }}</legend>
+           {{field}}
+        </fieldset>
+        <p>{{field.errors}}</p>
+{% endfor%}

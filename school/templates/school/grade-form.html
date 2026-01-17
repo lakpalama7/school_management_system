@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load form_extras %}
+
+{% block title %}
+Grade Register
+{% endblock title %}
+
+{% block content %}
+
+<main class=" min-h-screen flex flex-col gap-5 p-6 w-full" id="main">
+    <h1 class="text-3xl font-bold mb-4">Add Grades</h1>
+    <div class="flex gap-12">
+        <form id="add_class_form" action="" method="post" class="flex-grow max-w-[500px]" >
+        {% csrf_token %}
+        <fieldset class="fieldset mb-1">
+            <label class="label text-xl" for="{{ form.name.id_for_label }}">
+                {{form.name.label}}</label>
+                {{form.name|add_class:"input p-3 mb-1 min-w-[300px] w-full"}}
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li class="text-red-500 text-sm">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            </fieldset>
+       
+        <button type="submit" class="btn btn-primary">Add Grade</button>
+    </form>
+    <div class="flex flex-col flex-grow">
+        <h1 class="text-2xl font-bold mb-4">Grade List</h1>
+            <table class="table">
+                <!-- head -->
+                <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="grade_list">
+                <!-- row 1 -->
+                {% for grade in grade_list %}
+                <tr>
+                    <th>{{ forloop.counter }}</th>
+                    <td>{{grade.name}}</td>
+                    <td>Update | Delete </td>
+                
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    </div>
+</main>
+
+<script>
+
+    function show_toast_message(message, success=true){
+        const mainDiv = document.getElementById("main")
+        const toastDiv = document.getElementById("toast-message")
+        toastDiv?.remove()
+        
+        mainDiv.insertAdjacentHTML("afterbegin",
+        ` <div class="toast toast-end toast-top" id="toast-message">
+        
+            <div class="alert alert-${success === true ? "success" : "error"} alert-soft">
+                <span>${message}</span>
+
+            </div>
+        </div>
+        
+        
+        `)
+    }
+    function add_grade_to_table(grade){
+        const table_body = document.getElementById("grade_list");
+        const table_row = document.createElement("tr")
+        const row_count = table_body.children.length
+        table_row.innerHTML = `
+            <th>${row_count + 1 }</th>  
+            <td>${grade.name}</td>
+            <td>Update | Delete</td>
+        `
+        table_body.appendChild(table_row)
+    }
+
+
+
+    document.getElementById("add_class_form")
+    .addEventListener("submit", function (e){
+        e.preventDefault(); //prevent the form from submitting normally, which would cause a page reload
+        const formData = new FormData(this); //this means current form
+        const csrf_token = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        //console.log("csrf :", csrf_token)
+
+        fetch("{% url 'school:grade' %}", {
+            method: "POST",
+            headers: { "X-CSRFToken": csrf_token },
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success){
+                    show_toast_message(data.message, true)
+                    add_grade_to_table(data.data);
+
+                }else{
+                    show_toast_message(`Error: ${data.message}`, false)
+                    
+                }
+            })
+            .catch((err) => console.error(err));
+    });
+</script>
+{% endblock content %}

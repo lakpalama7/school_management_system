@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}
+Register page
+{% endblock %}
+
+{% block sidebar%}
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center flex-grow p-4">
+    
+    <form action="" method="post" class="w-[30%] border border-white rounded-md p-4" enctype="multipart/form-data">
+        {% csrf_token %}
+       <h1 class="text-3xl font-bold mb-3"> User Registation </h1>
+       <hr>
+       {% for error in forms.non_field_errors%}
+       <div class="alert alert-error alert-soft">
+        <span>{{ error }}</span>
+       </div>
+        {% endfor %}
+       {% for form in forms %}
+
+       <fieldset class="">
+        <legend class=""> {{form.label}}  </legend>
+        {{ form }}
+
+        {% for error in form.errors %}
+        <div class="text red 600 text-sm">
+            <span>{{error}}</span>
+        </div>
+        {% endfor %}
+        
+        </fieldset>
+       
+       {% endfor %}
+    
+         <button class="btn btn-primary">Register</button>
+         <a href="{% url 'accounts:school_admin_login' %}" class="mt-4 text-sm text-blue-500">
+                Already have an account? Click here to login
+            </a>
+    </form>
+</div>
+
+
+
+{% endblock %}

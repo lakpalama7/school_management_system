@@ -1,0 +1,71 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"></html>
+<head>
+    <title>
+        {% block title %}
+        Django Tailwind
+        {% endblock %}
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+     {% tailwind_css %}
+</head>
+
+<body class="flex h-screen bg-base-200">
+
+    {% block sidebar %}
+    <!-- Sidebar -->
+    <aside class="w-64 bg-base-100 shadow-lg flex flex-col">
+
+        <div class="p-4 text-2xl font-bold border-b border-base-300">
+            MySite
+        </div>
+
+        <nav class="flex-grow p-4">
+            <ul class="menu menu-vertical space-y-2">
+                <li><a href="{% url 'main:home' %}" class="rounded-md">Dashboard</a></li>
+                <li><a href="{% url 'main:student_register' %}" class="rounded-md">Students</a></li>
+                <li><a href="#" class="rounded-md">Reports</a></li>
+                
+            </ul>
+        </nav>
+
+        <div class="p-2 border-t border-base-300">
+             <a class="btn btn-outline btn-sm w-full" href="{% url 'school:school_profile' %}">
+                Profile
+            </a>
+            <a class="btn btn-outline btn-sm w-full" href="{% url 'accounts:logout_view' %}">
+                Logout
+            </a>
+        </div>
+
+        <div class="p-2 border-t border-base-300">
+            <button class="btn btn-outline btn-sm w-full" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
+                🌓 Toggle Theme
+            </button>
+        </div>
+
+    </aside>
+
+    {% endblock %}
+
+    {% block content %}
+    default content
+    {% endblock %}
+
+
+    <!-- light and dark mode toggle script  -->
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute("data-theme");
+            const newTheme = current === "light" ? "dark" : "light";
+            html.setAttribute("data-theme", newTheme);
+        }
+    </script>
+</body>
+</html>

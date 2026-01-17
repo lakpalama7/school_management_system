@@ -1,0 +1,49 @@
+{% extends 'base.html'%}
+
+{% block title %}
+Student Register
+{% endblock %}
+
+{% block content %}
+
+
+<main class="flex-grow p-6 overflow-auto">
+    <h1 class="text-3xl font-bold mb-6">Student Register</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <fieldset class="fieldset">
+        <legend class="fieldset-legend">First Name</legend>
+        <input name='first_name' type="text" class="input input-neutral" placeholder="e.g John" value="{{form_data.first_name}}"/>
+        <p class="label">
+            {% if errors.first_name %} {{errors.first_name}} {% endif %}
+        </p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+        <legend class="fieldset-legend">Last Name</legend>
+        <input name='last_name' type="text" class="input input-neutral" placeholder="e.g Dear" value="{{form_data.last_name}}" />
+        <p class="label">
+            {% if errors.last_name %} {{errors.last_name }} {% endif %}
+        </p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+        <legend class="fieldset-legend">Address </legend>
+        <input name='address' type="text" class="input input-neutral" placeholder="e.g Helsinki" value="{{form_data.address}}" />
+        <p class="label">
+            {% if errors.address %}{{errors.address}}{% endif %}
+        </p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+        <legend class="fieldset-legend">Phone</legend>
+        <input name='phone' type="number" class="input input-neutral" placeholder="e.g 0449810233" value="{{form_data.phone}}"/>
+        <p class="label">
+            {% if errors.phone %}{{errors.phone}}{% endif %}
+        </p>
+        </fieldset>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</main>
+
+{% endblock %}

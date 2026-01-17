@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+Login page
+{% endblock %}
+
+{% block sidebar%}
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center flex-grow p-4">
+    
+    <form action="" method="post" class="w-[30%] border border-white rounded-md p-4">
+        {% csrf_token %}
+        
+        {% for message in messages %}
+        <div class="alert alert-error alert-soft">
+            <span> {{message}}</span>
+        </div>
+        {% endfor %}
+       <h1 class="text-3xl font-bold mb-3"> OTP Confirmation</h1>
+       <hr>
+       <fieldset class="fieldset">
+        <legend class="fieldset-legend">Enter you OTP </legend>
+        <input type="text" name="otp" required placeholder="123456" class="input">
+        </fieldset>
+        <button type="submit" class="btn btn-primary mt-2">Confirm</button><br>
+        <p class="text-sm text-white"> This may take a while, please wait</p> 
+        <a href="{% url 'accounts:school_admin_login' %}" class="mt-4 text-sm text-blue-500">
+                Didn't get OTP. Click here to resend.
+            </a>
+    </form>
+</div>
+
+
+
+{% endblock %}
