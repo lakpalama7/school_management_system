@@ -2,10 +2,11 @@ from django.shortcuts import render,redirect
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from school.forms import SchoolForms, GradeForm
-from school.models import School
+from school.models import School,Grade
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.db import IntegrityError
+from django.contrib import messages
 # Create your views here.
 @require_POST
 def school_register(request):
@@ -75,11 +76,53 @@ def grade(request):
                         "message":"Grade added successfully",
                         "data": saved_grade_data,
                     })
+
     form = GradeForm()
     grade_list = request.user.school.classes.all() #get all the grade list of current user school
     context = {
         "form":form,
         "grade_list":grade_list,
     }
-    return render(request,"school/grade-form.html", context)
+    return render(request,"school/grade-create-form.html", context)
 
+
+def grade_delete(request,pk):
+    try:
+        Grade.objects.get(id=pk).delete()
+
+    except Grade.DoesNotExist:
+        return JsonResponse({
+            "success":False,
+            "message":"Grade doesn't exits",
+        })
+    else:
+        return JsonResponse({
+            "success":True,
+            "message":"Grade successfully deleted",
+        })
+
+def grade_update(request,pk):
+  
+    try:
+        grade = Grade.objects.get(pk=pk)
+
+    except Grade.DoesNotExist:
+        messages.error(request, "Grade does not exits")
+        return redirect("school:grade")
+    
+    if request.method == 'POST':
+        form = GradeForm(request.POST, instance=grade, request=request)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Grade updated successfully")
+            return redirect("school:grade")
+        
+        messages.error(request, "Failed to update grade")
+        return redirect("school:grade")    
+    else:
+        form = GradeForm(instance=grade, request=request)
+        context ={
+            "form":form,
+        }
+        return render(request, "school/grade-update-form.html",context)
+    

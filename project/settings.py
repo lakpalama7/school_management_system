@@ -146,13 +146,12 @@ EMAIL_HOST = 'smtp.gmail.com'  # or your SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-<<<<<<< HEAD
-EMAIL_HOST_USER = 'sherpasvcet@gmail.com'
-EMAIL_HOST_PASSWORD = 'znyq kaco ujdx xwxu'  # Use app password for Gmail
-=======
+
 EMAIL_HOST_USER = 'svcet@gmail.com'
 EMAIL_HOST_PASSWORD = ''  # Use app password for Gmail
->>>>>>> 268a2ce7e506c02704a72f217ef240d9ab58998c
+
+EMAIL_HOST_USER = 'svcet@gmail.com'
+EMAIL_HOST_PASSWORD = ''  # Use app password for Gmail
 
 # Default from email
 DEFAULT_FROM_EMAIL = 'svcet@gmail.com'

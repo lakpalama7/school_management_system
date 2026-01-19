@@ -9,6 +9,19 @@ Grade Register
 {% block content %}
 
 <main class=" min-h-screen flex flex-col gap-5 p-6 w-full" id="main">
+    <!-- update form message display here -->
+     {% for message in messages %}
+      <div class="toast toast-end toast-top">
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-error alert-soft">
+        {% else %}
+             <div class="alert alert-success alert-soft">
+            {% endif %}
+            <span>{{message}}</span>
+        </div>
+        </div>
+    </div>
+     {% endfor %}
     <h1 class="text-3xl font-bold mb-4">Add Grades</h1>
     <div class="flex gap-12">
         <form id="add_class_form" action="" method="post" class="flex-grow max-w-[500px]" >
@@ -40,10 +53,15 @@ Grade Register
                 <tbody id="grade_list">
                 <!-- row 1 -->
                 {% for grade in grade_list %}
-                <tr>
+                <tr id="grade-{{grade.id }}">
                     <th>{{ forloop.counter }}</th>
                     <td>{{grade.name}}</td>
-                    <td>Update | Delete </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{% url 'school:grade_update' grade.id %}" class="btn btn-sm btn-primary">Update</a>
+                            <button data-grade-id="{{ grade.id }}" class="btn btn-sm btn-error" onclick="delete_grade(this)">Delete</button>
+                        </div>
+                    </td>
                 
                 </tr>
                 {% endfor %}
@@ -54,7 +72,29 @@ Grade Register
 </main>
 
 <script>
-
+    function remove_grade_from_table(grade_id){
+        
+        const row_id_to_be_deleted = `grade-${grade_id}`
+        const row_to_be_deleted=document.getElementById(row_id_to_be_deleted)
+        row_to_be_deleted.remove()
+    }
+    function delete_grade(btnElement){
+        const grade_id= btnElement.dataset.gradeId
+        fetch("{% url 'school:grade_detele' 'dummy' %}".replace('dummy',grade_id))
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success){
+                    show_toast_message(data.message, true)
+                    remove_grade_from_table(grade_id)
+                    
+                }else{
+                    show_toast_message(`Error: ${data.message}`, false)
+                    
+                }
+            })
+            .catch((err) => console.error(err));
+           
+    }
     function show_toast_message(message, success=true){
         const mainDiv = document.getElementById("main")
         const toastDiv = document.getElementById("toast-message")
@@ -76,10 +116,16 @@ Grade Register
         const table_body = document.getElementById("grade_list");
         const table_row = document.createElement("tr")
         const row_count = table_body.children.length
+        table_row.id = `grade-${grade.id}`
         table_row.innerHTML = `
             <th>${row_count + 1 }</th>  
             <td>${grade.name}</td>
-            <td>Update | Delete</td>
+            <td>
+                <div class="flex gap-2">
+                    <button data-grade-id="${grade.id }" class="btn btn-sm btn-primary">Update</button>
+                    <button data-grade-id="${ grade.id }" class="btn btn-sm btn-error" onclick="delete_grade(this)">Delete</button>
+                </div>
+            </td>
         `
         table_body.appendChild(table_row)
     }

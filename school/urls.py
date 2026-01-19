@@ -7,4 +7,7 @@ urlpatterns = [
     path("profile/",views.school_profile, name="school_profile"),
     path("update/",views.update_school, name="update_school"),
     path("grade/", views.grade, name="grade"),
+    path("grade/<pk>/delete/", views.grade_delete, name="grade_detele"),
+    path("grade/<pk>/update/", views.grade_update, name="grade_update"),
+
 ]
